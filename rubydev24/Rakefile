@@ -1,0 +1,20 @@
+# load our own booting sequence
+require File.expand_path('../../config/boboot', __FILE__)
+Boboot.require_boot!
+
+require 'rake'
+require 'rake/testtask'
+require 'rake/task'
+
+require 'thomas'
+
+config = Thomas.config
+rconfig = config['baseruby']
+docker_config = rconfig['rubydev24']['docker']
+
+docker_opts = Thomas::Helper.symbolize_keys(docker_config)
+docker_opts[:run] = lambda do |task, opts|
+  opts
+end
+
+Thomas.include_docker_tasks(docker_opts)

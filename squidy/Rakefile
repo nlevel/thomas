@@ -1,0 +1,44 @@
+require File.expand_path('../../config/boboot', __FILE__)
+Boboot.require_boot!
+
+require 'rake'
+require 'rake/testtask'
+require 'rake/task'
+
+require 'thomas'
+
+module Squidy
+  VAR_VOLUME = '/var/squid'
+  EXPOSED_PORT = 3128
+end
+
+config = Thomas.config
+sconfig = config['squidy']
+docker_config = sconfig['docker']
+
+docker_opts = Thomas::Helper.symbolize_keys(docker_config)
+docker_opts[:run] = lambda do |task, opts|
+  squidy_var_path = config.finalize_paths(sconfig['var'])
+
+  opts << '-v %s:%s' % [ squidy_var_path, Squidy::VAR_VOLUME ]
+
+  sconfig['listen'].each do |i|
+    opts << '-p %s:%s:%s' % [ i, sconfig['port'], Squidy::EXPOSED_PORT ]
+  end
+
+  opts << '-e SQUID_CONF=squid.conf'
+
+  opts
+end
+
+Thomas.include_docker_tasks(docker_opts)
+
+desc 'Perform initial setup'
+task :setup do
+  squidy_var_path = config.finalize_paths(sconfig['var'])
+
+  sh 'mkdir -p %s' % squidy_var_path
+  sh 'mkdir -p %s' % File.join(squidy_var_path, 'var')
+  sh 'mkdir -p %s' % File.join(squidy_var_path, 'var/cache')
+  sh 'mkdir -p %s' % File.join(squidy_var_path, 'var/log')
+end
