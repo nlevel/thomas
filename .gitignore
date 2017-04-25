@@ -53,3 +53,5 @@ build-iPhoneSimulator/
 .rvmrc
 
 config/bobbee.yml
+var/konsol
+var/squidy

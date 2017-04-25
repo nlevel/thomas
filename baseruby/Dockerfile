@@ -5,7 +5,7 @@ ENV BASERUBY_APP_ROOT=/opt/utilities/baseruby \
 
 # enable if you have a proxy nearby, if not, install a new one:
 #
-# docker run -p 0.0.0.0:14002:3128 -e SQUID_CONF=squid.internal.conf -d \
+# docker run -p 0.0.0.0:14002:3128 -e SQUID_CONF=internal -d \
 #   --name=squidy nlevel/squidy:latest
 
 ENV http_proxy="http://10.100.0.1:14002" \

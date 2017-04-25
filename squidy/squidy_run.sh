@@ -44,7 +44,7 @@ fi
 
 # default behaviour is to launch squid
 if [[ -z ${1} ]]; then
-    if [ "${SQUID_CONF}" eq "internal" ]; then
+    if [ "${SQUID_CONF}"="internal" ]; then
         SQUID_CONF="squid.internal.conf"
     fi
 
