@@ -1,7 +1,7 @@
 FROM bobby/baseimage:latest
 
 ENV CONSUL_VER="v0.8.1" \
-    CONSUL_DOWNLOAD_URL="https://raw.githubusercontent.com/nlevel/thomas/master/assets/consul_0.8.1_linux_amd64.gz" \
+    CONSUL_DOWNLOAD_URL="https://raw.githubusercontent.com/nlevel/thomas/master/konsol/assets/consul_0.8.1_linux_amd64.gz" \
     CONSUL_DOWNLOAD_SHA1="9837c47652f99c591644663b50b281102b126864" \
     CONSUL_VAR_DIR="/consul" \
     CONSUL_CONFIG_DIR="/consul.d"
@@ -17,7 +17,7 @@ ENV http_proxy="http://10.100.0.1:14002" \
 RUN apt-get -qq update && apt-get install -y apt-utils
 
 # Uncomment, to speed up installing of consul, from a local copy
-ADD assets/consul_0.8.1_linux_amd64.gz /tmp/consul.gz
+COPY assets/consul_0.8.1_linux_amd64.gz /tmp/consul.gz
 
 ADD konsol_setup.sh /tmp/konsol_setup.sh
 RUN /tmp/konsol_setup.sh

@@ -54,9 +54,9 @@ squidy:
 
 konsol:
   docker:
-    image_name: bobby/konsol
+    image_name: nlevel/konsol
     container_name: konsol
-    push_repo: bobby/konsol
+    push_repo: nlevel/konsol
     registry: nlevel/konsol
     push_mirrors:
       gcr: asia.gcr.io/nlevel-164003/nlevel/konsol
@@ -76,3 +76,17 @@ konsol:
     listen:
       - 127.0.0.1
       - 10.100.0.1
+
+reddys:
+  docker:
+    image_name: nlevel/reddys
+    container_name: reddys
+    push_repo: nlevel/reddys
+    registry: registry.caresharing
+    push_mirrors:
+      gcr: asia.gcr.io/nlevel-164003/nlevel/reddys
+      glr: glr.markjeee.com/nlevel/reddys
+  docker_run:
+    var: $thomas_root/var/reddys
+    port: 14006
+    durable_port: 14007

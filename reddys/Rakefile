@@ -1,0 +1,42 @@
+require File.expand_path('../../config/boboot', __FILE__)
+Boboot.require_boot!
+
+require 'rake'
+require 'rake/testtask'
+require 'rake/task'
+require 'rdoc/task'
+
+require 'thomas'
+require_relative 'reddys'
+
+config = Thomas.config
+rconfig = config['reddys']
+docker_config = rconfig['docker']
+
+docker_opts = Thomas::Helper.symbolize_keys(docker_config)
+docker_opts[:run] = lambda do |task, opts|
+  run_opts = rconfig['docker_run']
+
+  unless run_opts.nil? || run_opts.empty?
+    envs = { }
+
+    opts << '-v %s:%s' % [ Reddys.var_path, Reddys.var_path(true) ]
+    opts << '-p 127.0.0.1:%s:%s' % [ run_opts['port'], Reddys::EXPOSED_PORT ]
+    opts << '-p 127.0.0.1:%s:%s' % [ run_opts['durable_port'], Reddys::DURABLE_EXPOSED_PORT ]
+
+    envs['REDDYS_DURABLE_ENABLE'] = 1
+
+    envs.each do |e, v|
+      opts << '-e %s=%s' % [ e, v ]
+    end
+  end
+
+  opts
+end
+
+Thomas.include_docker_tasks(docker_opts)
+
+desc 'Perform initial setup'
+task :setup do
+  sh 'mkdir -p %s' % Reddys.var_path
+end

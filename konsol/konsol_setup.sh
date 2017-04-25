@@ -6,6 +6,7 @@ CONSUL_INSTALL_PATH=/usr/local/bin
 download_and_install() {
     cd /tmp
     [ ! -f consul.gz ] && curl -sko consul.gz $CONSUL_DOWNLOAD_URL
+    ls -fl consul.gz
     echo "$CONSUL_DOWNLOAD_SHA1 consul.gz" | sha1sum -c -
     gunzip consul.gz
     chmod +x consul
