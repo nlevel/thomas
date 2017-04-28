@@ -1,4 +1,4 @@
-FROM bobby/baseimage:latest
+FROM nlevel/baseimage:latest
 
 ENV CONSUL_VER="v0.8.1" \
     CONSUL_DOWNLOAD_URL="https://raw.githubusercontent.com/nlevel/thomas/master/konsol/assets/consul_0.8.1_linux_amd64.gz" \

@@ -57,7 +57,6 @@ konsol:
     image_name: nlevel/konsol
     container_name: konsol
     push_repo: nlevel/konsol
-    registry: nlevel/konsol
     push_mirrors:
       gcr: asia.gcr.io/nlevel-164003/nlevel/konsol
       glr: glr.markjeee.com/nlevel/konsol
@@ -82,7 +81,6 @@ reddys:
     image_name: nlevel/reddys
     container_name: reddys
     push_repo: nlevel/reddys
-    registry: registry.caresharing
     push_mirrors:
       gcr: asia.gcr.io/nlevel-164003/nlevel/reddys
       glr: glr.markjeee.com/nlevel/reddys

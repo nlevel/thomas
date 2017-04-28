@@ -1,4 +1,4 @@
-FROM bobby/baseimage:latest
+FROM nlevel/baseimage:latest
 
 ENV REDDYS_APP_PATH="/opt/services/reddys" \
     REDDYS_VAR_PATH="/opt/services/reddys/var" \

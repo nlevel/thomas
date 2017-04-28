@@ -171,7 +171,7 @@ module Thomas
         task :destroy do
           docker_do 'kill %s' % container_name, :ignore_fail => true
           docker_do 'rm %s' % container_name, :ignore_fail => true
-          docker_do 'rmi %s' % container_name, :ignore_fail => true
+          docker_do 'rmi %s' % image_name, :ignore_fail => true
         end
       end
     end
