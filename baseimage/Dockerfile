@@ -1,7 +1,8 @@
 FROM phusion/baseimage:latest
 MAINTAINER Mark John Buenconsejo <mark@nlevel.io>
 
-ENV CA_URLS=""
+ENV BASEIMAGE_PATH=/opt/baseimage \
+    CA_URLS=""
 
 # enable if you have a proxy nearby, if not, install a new one:
 #
@@ -11,8 +12,9 @@ ENV CA_URLS=""
 ENV http_proxy="http://10.100.0.1:14002" \
     https_proxy="http://10.100.0.1:14002"
 
-ADD base_setup.sh /tmp/base_setup.sh
-RUN /tmp/base_setup.sh
+ADD base_functions.sh $BASEIMAGE_PATH/base_functions.sh
+ADD base_setup.sh $BASEIMAGE_PATH/base_setup.sh
+RUN $BASEIMAGE_PATH/base_setup.sh
 
 RUN apt-get -qq update && apt-get -qq upgrade -y -o Dpkg::Options::="--force-confold"
 RUN apt-get -y install ca-certificates

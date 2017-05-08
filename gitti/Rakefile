@@ -1,0 +1,60 @@
+require File.expand_path('../../config/boboot', __FILE__)
+Boboot.require_boot!
+
+require 'rake'
+require 'rake/task'
+require 'rake/file_utils'
+
+require 'thomas'
+
+GITTI_ROOT_PATH = File.expand_path('../..', __FILE__)
+GITTI_LIB_PATH = File.join(GITTI_ROOT_PATH, 'lib')
+$: << GITTI_LIB_PATH
+
+require_relative 'gitti'
+
+config = Thomas.config
+gconfig = config['gitti']
+docker_config = gconfig['docker']
+
+docker_opts = Thomas::Helper.symbolize_keys(docker_config)
+docker_opts[:run] = lambda do |task, opts|
+  run_opts = gconfig['docker_run']
+  gitti_var_path = Gitti.var_path
+
+  opts << '-v %s:%s' % [ gitti_var_path, Gitti::DATA_VOLUME ]
+
+  run_opts['listen'].each do |i|
+    opts << '-p %s:%s:%s' % [ i, run_opts['port'], Gitti::EXPOSED_PORT ]
+  end
+
+  opts
+end
+
+Thomas.include_docker_tasks(docker_opts)
+
+desc 'Perform initial setup'
+task :setup do
+  gitti_var_path = Gitti.var_path
+  gitti_ssh_path = Gitti.ssh_path
+
+  if ENV['RESETUP']
+    sh 'rm -Rf %s' % gitti_var_path
+  end
+
+  sh 'mkdir -p %s' % gitti_var_path
+  sh 'mkdir -p %s' % gitti_ssh_path
+
+  Gitti.setup_ssh_keys
+end
+
+desc 'Remove files in gitti data path and perform setup'
+task :resetup do
+  ENV['RESETUP'] = '1'
+  Rake::Task['setup'].invoke
+end
+
+task :sync do
+  Rake::Task['setup'].invoke
+  Gitti.sync_repos
+end

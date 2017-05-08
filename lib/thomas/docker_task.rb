@@ -1,4 +1,6 @@
 require 'rake'
+require 'rake/task'
+require 'rake/tasklib'
 
 module Thomas
   class DockerTask < Rake::TaskLib
