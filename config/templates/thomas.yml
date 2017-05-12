@@ -37,6 +37,26 @@ baseruby:
         gcr: asia.gcr.io/nlevel-164003/nlevel/rubydev23
         glr: glr.markjeee.com/nlevel/rubydev23
 
+  rubydev22:
+    docker:
+      image_name: nlevel/rubydev22
+      container_name: rubydev22
+      bash: su -l rubydev
+      push_repo: nlevel/rubydev22
+      push_mirrors:
+        gcr: asia.gcr.io/nlevel-164003/nlevel/rubydev22
+        glr: glr.markjeee.com/nlevel/rubydev22
+
+  rubydev19:
+    docker:
+      image_name: nlevel/rubydev19
+      container_name: rubydev19
+      bash: su -l rubydev
+      push_repo: nlevel/rubydev19
+      push_mirrors:
+        gcr: asia.gcr.io/nlevel-164003/nlevel/rubydev19
+        glr: glr.markjeee.com/nlevel/rubydev19
+
 squidy:
   docker:
     image_name: nlevel/squidy
