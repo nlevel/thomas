@@ -9,7 +9,6 @@ disable_unused_services() {
     mv /etc/service/cron /etc/service.disabled
 }
 
-install_ca
 disable_unused_services
 
 mkdir -p /etc/my_init.d
