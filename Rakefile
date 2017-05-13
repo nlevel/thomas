@@ -5,7 +5,8 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/task'
 
-CONTAINERS = [ 'baseimage', 'baseruby', 'gitti', 'konsol', 'reddys', 'rubydev23', 'rubydev24', 'squidy' ]
+CONTAINERS = [ 'baseimage', 'baseruby', 'gitti', 'konsol', 'reddys',
+               'rubydev23', 'rubydev24', 'squidy', 'rubydev22', 'rubydev19' ]
 
 Rake::TestTask.new do |t|
   t.libs << %w(test lib)
