@@ -37,6 +37,26 @@ baseruby:
         gcr: asia.gcr.io/nlevel-164003/nlevel/rubydev23
         glr: glr.markjeee.com/nlevel/rubydev23
 
+  rubydev22:
+    docker:
+      image_name: nlevel/rubydev22
+      container_name: rubydev22
+      bash: su -l rubydev
+      push_repo: nlevel/rubydev22
+      push_mirrors:
+        gcr: asia.gcr.io/nlevel-164003/nlevel/rubydev22
+        glr: glr.markjeee.com/nlevel/rubydev22
+
+  rubydev19:
+    docker:
+      image_name: nlevel/rubydev19
+      container_name: rubydev19
+      bash: su -l rubydev
+      push_repo: nlevel/rubydev19
+      push_mirrors:
+        gcr: asia.gcr.io/nlevel-164003/nlevel/rubydev19
+        glr: glr.markjeee.com/nlevel/rubydev19
+
 squidy:
   docker:
     image_name: nlevel/squidy
@@ -45,8 +65,64 @@ squidy:
     push_mirrors:
       gcr: asia.gcr.io/nlevel-164003/nlevel/squidy
       glr: glr.markjeee.com/nlevel/squidy
-  var: $thomas_root/var/squidy
-  port: 14002
-  listen:
-    - 127.0.0.1
-    - 10.100.0.1
+  docker_run:
+    var: $thomas_root/var/squidy
+    port: 14002
+    listen:
+      - 127.0.0.1
+      - 10.100.0.1
+
+konsol:
+  docker:
+    image_name: nlevel/konsol
+    container_name: konsol
+    push_repo: nlevel/konsol
+    push_mirrors:
+      gcr: asia.gcr.io/nlevel-164003/nlevel/konsol
+      glr: glr.markjeee.com/nlevel/konsol
+  docker_run:
+    domain: cluster.dev
+    node: vmhost
+    advertise: 10.100.0.1
+    var: $thomas_root/var/konsol
+    config: $thomas_root/konsol/config
+    client_port: 8500
+    dns_port: 8600
+    rpc_port: 8400
+    cluster_lan_port: 8301
+    cluster_wan_port: 8302
+    cluster_rpc_port: 8300
+    listen:
+      - 127.0.0.1
+      - 10.100.0.1
+
+reddys:
+  docker:
+    image_name: nlevel/reddys
+    container_name: reddys
+    push_repo: nlevel/reddys
+    push_mirrors:
+      gcr: asia.gcr.io/nlevel-164003/nlevel/reddys
+      glr: glr.markjeee.com/nlevel/reddys
+  docker_run:
+    var: $thomas_root/var/reddys
+    port: 14006
+    durable_port: 14007
+
+gitti:
+  docker:
+    image_name: nlevel/gitti
+    container_name: gitti
+    push_repo: nlevel/gitti
+    push_mirrors:
+      gcr: asia.gcr.io/nlevel-164003/nlevel/gitti
+      glr: glr.markjeee.com/nlevel/gitti
+  docker_run:
+    var: $thomas_root/var/gitti
+    port: 14001
+    listen:
+      - 127.0.0.1
+      - 10.100.0.1
+    private_key: '~/.ssh/some_private_key'
+    git_server: 'git@some_git_server'
+    repos:

@@ -1,0 +1,77 @@
+require File.expand_path('../../config/boboot', __FILE__)
+Boboot.require_boot!
+
+require 'rake'
+require 'rake/testtask'
+require 'rake/task'
+require 'rdoc/task'
+
+require 'thomas'
+
+module Konsol
+  CLIENT_PORT = 8500
+  DNS_PORT = 8600
+  RPC_PORT = 8400
+
+  CLUSTER_RPC_PORT = 8300
+  CLUSTER_LAN_PORT = 8301
+  CLUSTER_WAN_PORT = 8302
+
+  VAR_DIR = '/consul'
+  CONFIG_DIR = '/consul.d'
+end
+
+config = Thomas.config
+kconfig = config['konsol']
+docker_config = kconfig['docker']
+
+docker_opts = Thomas::Helper.symbolize_keys(docker_config)
+docker_opts[:run] = lambda do |task, opts|
+  run_opts = kconfig['docker_run']
+
+  unless run_opts.nil? || run_opts.empty?
+    konsol_var_path = config.finalize_paths(run_opts['var'])
+    konsol_config_path = config.finalize_paths(run_opts['config'])
+
+    envs = { }
+
+    opts << '-v %s:%s' % [ konsol_var_path, Konsol::VAR_DIR ]
+    opts << '-v %s:%s' % [ konsol_config_path, Konsol::CONFIG_DIR ]
+
+    run_opts['listen'].each do |i|
+      opts << '-p %s:%s:%s' % [ i, run_opts['cluster_lan_port'], Konsol::CLUSTER_LAN_PORT ]
+      opts << '-p %s:%s:%s/udp' % [ i, run_opts['cluster_lan_port'], Konsol::CLUSTER_LAN_PORT ]
+      opts << '-p %s:%s:%s' % [ i, run_opts['cluster_wan_port'], Konsol::CLUSTER_WAN_PORT ]
+      opts << '-p %s:%s:%s/udp' % [ i, run_opts['cluster_wan_port'], Konsol::CLUSTER_WAN_PORT ]
+      opts << '-p %s:%s:%s' % [ i, run_opts['cluster_rpc_port'], Konsol::CLUSTER_RPC_PORT ]
+    end
+
+    # by default, client conns is only allowed for 127.0.0.1
+    opts << '-p 127.0.0.1:%s:%s' % [ run_opts['client_port'], Konsol::CLIENT_PORT ]
+    opts << '-p 127.0.0.1:%s:%s' % [ run_opts['dns_port'], Konsol::DNS_PORT ]
+    opts << '-p 127.0.0.1:%s:%s/udp' % [ run_opts['dns_port'], Konsol::DNS_PORT ]
+    opts << '-p 127.0.0.1:%s:%s' % [ run_opts['rpc_port'], Konsol::RPC_PORT ]
+
+    envs['CONSUL_ADVERTISE'] = run_opts['advertise']
+    envs['CONSUL_SERVER'] = 1
+    envs['CONSUL_BOOTSTRAP_EXPECT'] = 1
+    envs['CONSUL_DOMAIN'] = run_opts['domain']
+    envs['CONSUL_NODE'] = run_opts['node']
+
+    envs.each do |e, v|
+      opts << '-e %s=%s' % [ e, v ]
+    end
+  end
+
+  opts
+end
+
+Thomas.include_docker_tasks(docker_opts)
+
+desc 'Perform initial setup'
+task :setup do
+  run_opts = kconfig['docker_run']
+  konsol_var_path = config.finalize_paths(run_opts['var'])
+
+  sh 'mkdir -p %s' % konsol_var_path
+end
