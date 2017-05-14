@@ -4,6 +4,7 @@ Boboot.require_boot!
 require 'rake'
 require 'rake/testtask'
 require 'rake/task'
+require 'docker_task'
 
 CONTAINERS = [ 'baseimage', 'baseruby', 'gitti', 'konsol', 'reddys',
                'rubydev23', 'rubydev24', 'squidy', 'rubydev22', 'rubydev19' ]
@@ -36,5 +37,12 @@ desc 'Pull all latest from Docker Hub'
 task :docker_pullall do
   CONTAINERS.each do |c_name|
     sh 'cd %s; rake docker:pull' % c_name
+  end
+end
+
+desc 'Build all docker images'
+task :docker_buildall do
+  CONTAINERS.each do |c_name|
+    sh 'cd %s; rake docker:build' % c_name
   end
 end
