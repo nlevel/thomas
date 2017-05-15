@@ -21,9 +21,9 @@ FileList['rakelib/**/*.rb', 'rakelib/**/*.rake'].to_a.uniq.
 
 desc 'Perform house cleaning in the docker environment'
 task :docker_cleanup do
-  sh 'docker rmi $(docker images -f "dangling=true" -q)'
-  sh 'docker volume rm $(docker volume ls -qf dangling=true)'
-  sh 'docker rmi $(docker images | grep "^<none>" | awk "{print $3}")'
+  sh 'docker rmi $(docker images -f "dangling=true" -q); true'
+  sh 'docker volume rm $(docker volume ls -qf dangling=true); true'
+  sh 'docker rmi $(docker images | grep "^<none>" | awk "{print $3}"); true'
 end
 
 desc 'Push all latest to Docker Hub'
