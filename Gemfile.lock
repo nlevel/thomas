@@ -19,8 +19,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cableguy
-  docker_task
+  cableguy!
+  docker_task!
   minitest
   rake
 

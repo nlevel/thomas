@@ -81,7 +81,7 @@ konsol:
       gcr: asia.gcr.io/nlevel-164003/nlevel/konsol
       glr: glr.markjeee.com/nlevel/konsol
   docker_run:
-    domain: cluster.dev
+    domain: cluster.devbox
     node: vmhost
     advertise: 10.100.0.1
     var: $thomas_root/var/konsol
