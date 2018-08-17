@@ -10,8 +10,4 @@ biconfig = config['baseimage']
 docker_config = biconfig['docker']
 
 docker_opts = Thomas::Helper.symbolize_keys(docker_config)
-docker_opts[:run] = lambda do |task, opts|
-  opts
-end
-
 Thomas.include_docker_tasks(docker_opts)

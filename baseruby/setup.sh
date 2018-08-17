@@ -13,7 +13,7 @@ prepare_app_root() {
 }
 
 setup_rubydev() {
-    setuser rubydev $BASERUBY_APP_ROOT/setup_rubydev.sh
+    setuser $RUBYDEV_USER $BASERUBY_APP_ROOT/setup_rubydev.sh
 }
 
 add_user
